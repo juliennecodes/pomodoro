@@ -1,4 +1,4 @@
-export function TimerControls({countdown, startTimer, stopTimer, pauseTimer}){
+export function TimerControls({startTimer, stopTimer, pauseTimer}){
     return (
         <>
             <button onClick={startTimer}>Start</button>

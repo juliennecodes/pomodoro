@@ -15,8 +15,7 @@ function App() {
   };
 
   const startTimer = ()=> {
-    const seconds = timeRemaining;
-    const interval  = setInterval(()=> setTimeRemaining(seconds - 1), 1000);
+    const interval  = setInterval(countdown, 1000);
     setCleanupId(interval);
   };
 
@@ -34,8 +33,7 @@ function App() {
 
   useEffect(()=>{
     if(cleanupId) {
-      const seconds = timeRemaining;
-      const interval  = setInterval(()=> setTimeRemaining(seconds - 1), 1000);
+      const interval  = setInterval(countdown, 1000);
       setCleanupId(interval);
 
       return ()=> clearInterval(cleanupId); 
@@ -47,7 +45,7 @@ function App() {
       <h1>Pomodoro</h1>
       <Pomodoros completedPomodoros={completedPomodoros}/>
       <Timer timeRemaining={timeRemaining} />
-      <TimerControls countdown={countdown} startTimer={startTimer} stopTimer={stopTimer} pauseTimer={pauseTimer}/>
+      <TimerControls startTimer={startTimer} stopTimer={stopTimer} pauseTimer={pauseTimer}/>
     </div>
   );
 }
