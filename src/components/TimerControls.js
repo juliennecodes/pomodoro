@@ -1,9 +1,9 @@
-export function TimerControls({startTimer, stopTimer, pauseTimer}){
+export function TimerControls({startTimer, stopTimer, pauseTimer, resetTimer}){
     return (
         <>
             <button onClick={startTimer}>Start</button>
             <button onClick={pauseTimer}>Pause</button>
-            <button onClick={stopTimer}>Stop</button>
+            <button onClick={resetTimer}>Reset</button>
         </>
     )
 };
