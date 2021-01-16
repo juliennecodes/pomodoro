@@ -14,18 +14,10 @@ function App() {
     setTimeRemaining(seconds - 1);
   };
 
-  // const countdown = useCallback(()=>{
-  //   const seconds = timeRemaining;
-  //   setTimeRemaining(seconds - 1);
-  // }, [timeRemaining]);
-
   const startTimer = ()=> {
     const seconds = timeRemaining;
-    // setTimeout(setTimeRemaining(seconds - 1), 1000);
-    // setTimeout(()=> setTimeRemaining(seconds - 1), 1000);
     const interval  = setInterval(()=> setTimeRemaining(seconds - 1), 1000);
     setCleanupId(interval);
-    console.log(`this is the start timer, interval is ${interval}, cleanupId is ${cleanupId}`);
   };
 
   const pauseTimer = () => {
@@ -42,27 +34,12 @@ function App() {
 
   useEffect(()=>{
     if(cleanupId) {
-      console.log("effect taking place");
       const seconds = timeRemaining;
-      // const interval  = setInterval(setTimeRemaining(seconds - 1), 1000);
       const interval  = setInterval(()=> setTimeRemaining(seconds - 1), 1000);
-      // const interval  = setInterval(()=> {setTimeRemaining(seconds - 1); console.log("effect taking place")}, 1000);
-
-      // setCleanupId(setInterval(()=> setTimeRemaining(seconds - 1), 1000));
       setCleanupId(interval);
 
-      // console.log(`from useEffect, interval is ${interval}, this is the scheduled effect? `);
-      // console.log(`from useEffect, cleanup id is ${cleanupId}`);
-      // return clearInterval(interval);
-      // return ()=>{clearInterval(interval)};
-      // return () => clearInterval(cleanupId);
-      return ()=>{
-        console.log("cleanup taking place")
-        // console.log(`from cleanup, cleaning up ${cleanupId}`);
-        clearInterval(cleanupId);
-      };
+      return ()=> clearInterval(cleanupId); 
     }
-    
   }, [timeRemaining]);
 
   return ( 
