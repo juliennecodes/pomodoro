@@ -50,11 +50,6 @@ function App() {
   };
 
   useEffect(()=>{
-    // if(timeRemaining === 0) stopTimer();
-    // if(timeRemaining === 0) {
-    //   clearInterval(cleanupId);
-    //   setCleanupId(null);
-    // }
     if(timerState === "active" && cleanupId) {
       const interval  = setInterval(countdown, 1000);
       setCleanupId(interval);
@@ -78,9 +73,7 @@ function App() {
           console.log(`completed pomodoros : ${completedPomodoros}`);
           setSession("bigBreak");
           setTimeRemaining(bigBreakTimer);
-        }  
-        
-        if(completedPomodoros % 4 !== 0){
+        } else {
           console.log(`completed pomodoros : ${completedPomodoros}`);
           setSession("break");
           setTimeRemaining(breakTimer);
@@ -93,32 +86,6 @@ function App() {
       }
     }
   }, [timerState, timeRemaining, session, completedPomodoros]);
-
-  // useEffect(()=>{
-  //   if(timerState === "inactive" && timeRemaining===0){
-  //     // stopTimer();
-  //     //sound rings
-  //     if(session === "work") setCompletedPomodoros(completedPomodoros + 1);
-  //     if(timeRemaining === 0){
-  //       if(session==="work"){
-  //         //should I put add pomodoro here? will it be fast enough to be included in the next line?
-  //         // setCompletedPomodoros(completedPomodoros + 1);
-  //         if(completedPomodoros % 4 === 0){
-  //           setSession("bigBreak");
-  //           setTimeRemaining(bigBreakTimer);
-  //         } else {
-  //           setSession("break");
-  //           setTimeRemaining(breakTimer);
-  //         }
-  //       }
-  
-  //       else {
-  //         setSession("work");
-  //         setTimeRemaining(workTimer);
-  //       }
-  //     }
-  //   }
-  // }, [timeRemaining]);
 
   return ( 
     <div className="App">
