@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useReducer} from 'react';
 import {Pomodoros} from './components/Pomodoros';
 import {Timer} from './components/Timer';
 import { TimerControls } from './components/TimerControls';
@@ -11,89 +11,94 @@ const workTimer = 5;
 const breakTimer = 2;
 const bigBreakTimer = 5;
 
+const initialTimer = {
+  active: false,
+  session: 'work',
+  timeRemaining: workTimer,
+  completedPomodoros: 2,
+  // scheduledCountdown: null,
+};
+
+const pomodoroReducer = (state, action) => {
+  switch(action.type){
+    case 'timer-counting-down': return{...state, active: true, timeRemaining: state.timeRemaining - 1};
+    case 'start-timer' : return {...state, active: true};
+    case 'stop-timer' : return {...state, active: false};
+    // case 'timer-ends' : state.session === 'work' ? {...state, session: 'break' ,completedPomodoros: state.completedPomodoros + 1} : {...state, session: 'work'};
+    case 'switch-to-work-session': return {...state, active: false, session: 'work', timeRemaining: workTimer};
+    // case 'switch-to-break-session': return {...state, active: false, session: 'break', timeRemaining: breakTimer, completedPomodoros: state.completedPomodoros + 1};
+    // case 'switch-to-big-break-session': return {...state, active: false, session: 'bigBreak', timeRemaining: bigBreakTimer ,completedPomodoros: state.completedPomodoros + 1};
+    case 'switch-to-break-session': return {...state, active: false, session: 'break', timeRemaining: breakTimer};
+    case 'switch-to-big-break-session': return {...state, active: false, session: 'bigBreak', timeRemaining: bigBreakTimer};
+    case 'add-pomodoro': return {...state, completedPomodoros: state.completedPomodoros + 1};
+    default: return state;
+  }
+}
+//useReducer consolidates the many states
+//when rewriting, replace the previous setStates, only this time, you're modifying properties of the big state object
+
 function App() {
-  const [completedPomodoros, setCompletedPomodoros] = useState(2);
-  const [session, setSession] = useState("work");
-  const [timeRemaining, setTimeRemaining] = useState(workTimer);
-  const [cleanupId, setCleanupId] = useState(null);
-  const [timerState, setTimerState] = useState("inactive");
+  // const [state, setState] = useState(initialTimer);
+  const [state, dispatch] = useReducer(pomodoroReducer, initialTimer);
+  const [scheduledCountdown, setScheduledCountdown] = useState(null);
+  
 
   const countdown = () => {
-    if(timerState === "active" && timeRemaining > 0){
-      const seconds = timeRemaining;
-      setTimeRemaining(seconds - 1);
+    if(state.active === true && state.timeRemaining > 0){
+      // const seconds = state.timeRemaining;
+      // setTimeRemaining(seconds - 1);
+      dispatch({type: 'timer-counting-down'});
     }
   };
 
   const startTimer = ()=> {
-    setTimerState("active");
+    // setTimerState("active");
     const interval  = setInterval(countdown, 1000);
-    setCleanupId(interval);
-  };
-
-  const pauseTimer = () => {
-    setTimerState("inactive");
-    clearInterval(cleanupId);
-  };
-
-  const resetTimer = () => {
-    setTimerState("inactive");
-    clearInterval(cleanupId);
-    setCleanupId(null);
-    setTimeRemaining(workTimer);
+    setScheduledCountdown(interval);
+    dispatch({type: 'start-timer'});
   };
 
   const stopTimer = () => {
-    setTimerState("inactive");
-    clearInterval(cleanupId);
-    setCleanupId(null);
+    // setTimerState("inactive");
+    clearInterval(scheduledCountdown);
+    setScheduledCountdown(null);
+    dispatch({type: 'stop-timer'});
   };
+  //will this cause immediate re-render?
+  //what happens then, won't dispatch cause update, then rerender, 
+  //but setScheduledCountdown also updates so what happens then?
+  //since dispatch returns a new state, maybe just put it last?
 
   useEffect(()=>{
-    if(timerState === "active" && cleanupId) {
+    if(state.active === true && scheduledCountdown) {
       const interval  = setInterval(countdown, 1000);
-      setCleanupId(interval);
-      return ()=> clearInterval(cleanupId); 
+      setScheduledCountdown(interval);
+      return ()=> clearInterval(scheduledCountdown); 
     }
-  }, [timeRemaining, timerState]);
-  //it says I am missing dependencies but when I do include the dependencies, cleanupId and countdown,
-  //it creates an error saying maximum update depth exceeded
 
-  useEffect(()=>{
-    if(session === "work" && timeRemaining === 0){
-      setCompletedPomodoros(completedPomodoros + 1);
+    if(state.timeRemaining === 0 && state.session === 'work'){
+      dispatch({type: 'add-pomodoro'});
+      if(state.completedPomodoros % 4 === 0){dispatch({type: 'switch-to-big-break-session'});}
+      else {dispatch({type: 'switch-to-break-session'});}
     }
-  }, [timerState, completedPomodoros, session, timeRemaining]);
 
-  useEffect(()=>{
-    if(timeRemaining === 0){
-      setTimerState("inactive");
-      if(session === "work"){
-        if(completedPomodoros % 4 === 0){
-          console.log(`completed pomodoros : ${completedPomodoros}`);
-          setSession("bigBreak");
-          setTimeRemaining(bigBreakTimer);
-        } else {
-          console.log(`completed pomodoros : ${completedPomodoros}`);
-          setSession("break");
-          setTimeRemaining(breakTimer);
-        }
-      }
-
-      if(session === "break" || session === "bigBreak"){
-        setSession("work");
-        setTimeRemaining(workTimer);
-      }
+    if(state.timeRemaining === 0 && state.session === 'work' && state.completedPomodoros % 4 === 0){
+      dispatch({type: 'switch-to-big-break-session'});
+    } 
+    
+    if(state.timeRemaining === 0 && state.session === 'work' && state.completedPomodoros % 4 !== 0){
+      dispatch({type: 'switch-to-break-session'});
     }
-  }, [timerState, timeRemaining, session, completedPomodoros]);
+  }, [state.active, state.timeRemaining]);
+  //error when including countdown, scheduledCountdown, state.session, 
 
   return ( 
     <div className="App">
       <h1>Pomodoro</h1>
-      <p>{session}</p>
-      <Pomodoros completedPomodoros={completedPomodoros}/>
-      <Timer timeRemaining={timeRemaining} />
-      <TimerControls startTimer={startTimer} stopTimer={stopTimer} pauseTimer={pauseTimer} resetTimer={resetTimer}/>
+      <p>{state.session}</p>
+      <Pomodoros completedPomodoros={state.completedPomodoros}/>
+      <Timer timeRemaining={state.timeRemaining} />
+      <TimerControls startTimer={startTimer} stopTimer={stopTimer}/>
     </div>
   );
 }
