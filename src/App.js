@@ -38,36 +38,27 @@ const pomodoroReducer = (state, action) => {
 //when rewriting, replace the previous setStates, only this time, you're modifying properties of the big state object
 
 function App() {
-  // const [state, setState] = useState(initialTimer);
   const [state, dispatch] = useReducer(pomodoroReducer, initialTimer);
   const [scheduledCountdown, setScheduledCountdown] = useState(null);
   
 
   const countdown = () => {
     if(state.active === true && state.timeRemaining > 0){
-      // const seconds = state.timeRemaining;
-      // setTimeRemaining(seconds - 1);
       dispatch({type: 'timer-counting-down'});
     }
   };
 
   const startTimer = ()=> {
-    // setTimerState("active");
     const interval  = setInterval(countdown, 1000);
     setScheduledCountdown(interval);
     dispatch({type: 'start-timer'});
   };
 
   const stopTimer = () => {
-    // setTimerState("inactive");
     clearInterval(scheduledCountdown);
     setScheduledCountdown(null);
     dispatch({type: 'stop-timer'});
   };
-  //will this cause immediate re-render?
-  //what happens then, won't dispatch cause update, then rerender, 
-  //but setScheduledCountdown also updates so what happens then?
-  //since dispatch returns a new state, maybe just put it last?
 
   useEffect(()=>{
     if(state.active === true && scheduledCountdown) {
