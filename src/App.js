@@ -16,14 +16,16 @@ const initialTimer = {
   session: 'work',
   timeRemaining: workTimer,
   completedPomodoros: 2,
-  // scheduledCountdown: null,
+  scheduledCountdown: null,
 };
 
 const pomodoroReducer = (state, action) => {
   switch(action.type){
     case 'timer-counting-down': return{...state, active: true, timeRemaining: state.timeRemaining - 1};
-    case 'start-timer' : return {...state, active: true};
-    case 'stop-timer' : return {...state, active: false};
+    // case 'start-timer' : return {...state, active: true};
+    case 'start-timer' : return {...state, active: true, scheduledCountdown: action.scheduledCountdown};
+    // case 'stop-timer' : return {...state, active: false};
+    case 'stop-timer' : return {...state, active: false, scheduledCountdown: null};
     // case 'timer-ends' : state.session === 'work' ? {...state, session: 'break' ,completedPomodoros: state.completedPomodoros + 1} : {...state, session: 'work'};
     case 'switch-to-work-session': return {...state, active: false, session: 'work', timeRemaining: workTimer};
     // case 'switch-to-break-session': return {...state, active: false, session: 'break', timeRemaining: breakTimer, completedPomodoros: state.completedPomodoros + 1};
@@ -31,6 +33,7 @@ const pomodoroReducer = (state, action) => {
     case 'switch-to-break-session': return {...state, active: false, session: 'break', timeRemaining: breakTimer};
     case 'switch-to-big-break-session': return {...state, active: false, session: 'bigBreak', timeRemaining: bigBreakTimer};
     case 'add-pomodoro': return {...state, completedPomodoros: state.completedPomodoros + 1};
+    case 'schedule-countdown': return {...state, scheduledCountdown: action.scheduledCountdown};
     default: return state;
   }
 }
@@ -39,8 +42,6 @@ const pomodoroReducer = (state, action) => {
 
 function App() {
   const [state, dispatch] = useReducer(pomodoroReducer, initialTimer);
-  const [scheduledCountdown, setScheduledCountdown] = useState(null);
-  
 
   const countdown = () => {
     if(state.active === true && state.timeRemaining > 0){
@@ -50,21 +51,20 @@ function App() {
 
   const startTimer = ()=> {
     const interval  = setInterval(countdown, 1000);
-    setScheduledCountdown(interval);
-    dispatch({type: 'start-timer'});
+    dispatch({type: 'start-timer', scheduledCountdown: interval});
   };
 
   const stopTimer = () => {
-    clearInterval(scheduledCountdown);
-    setScheduledCountdown(null);
+    clearInterval(state.scheduledCountdown);
     dispatch({type: 'stop-timer'});
   };
 
   useEffect(()=>{
-    if(state.active === true && scheduledCountdown) {
+    if(state.active === true && state.scheduledCountdown) {
       const interval  = setInterval(countdown, 1000);
-      setScheduledCountdown(interval);
-      return ()=> clearInterval(scheduledCountdown); 
+      // setScheduledCountdown(interval);
+      dispatch({type: 'schedule-countdown', scheduledCountdown: interval});
+      return ()=> clearInterval(state.scheduledCountdown); 
     }
 
     if(state.timeRemaining === 0 && state.session === 'work'){
