@@ -13,6 +13,7 @@ const bigBreakTimer = 5;
 
 const initialTimer = {
   timeRemaining: workTimer,
+  session: 'work',
   scheduledCountdown: null,
 };
 
@@ -25,7 +26,10 @@ const pomodoroReducer = (state, action) => {
   if(action.type === 'start-timer'){
     return {...state, scheduledCountdown: action.scheduledCountdown};
     // return {...state, timeRemaining: state.timeRemaining - 1, scheduledCountdown: action.scheduledCountdown}; //just checking that clearInterval works
+  }
 
+  if(action.type === 'switch-session-to-break'){
+    return {...state, timeRemaining: breakTimer ,session: 'break'};
   }
 }
 
@@ -47,7 +51,10 @@ function App() {
   //starts countdown
 
   useEffect(()=>{
-    if(timer.timeRemaining === 0) clearInterval(timer.scheduledCountdown);
+    if(timer.timeRemaining === 0) {
+      clearInterval(timer.scheduledCountdown);
+      dispatch({type: 'switch-session-to-break'});
+    };
   }, [timer.timeRemaining, timer.scheduledCountdown]);
 
 
@@ -55,6 +62,7 @@ function App() {
   return ( 
     <div className="App">
       <h1>Pomodoro</h1>
+      <p>{timer.session}</p>
       <Timer timeRemaining={timer.timeRemaining} />
       <TimerControls startTimer={startTimer} />
     </div>
