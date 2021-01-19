@@ -13,12 +13,19 @@ const bigBreakTimer = 5;
 
 const initialTimer = {
   timeRemaining: workTimer,
+  scheduledCountdown: null,
 };
 
 const pomodoroReducer = (state, action) => {
   if(action.type === 'time-decrease'){
     if(state.timeRemaining - 1 <  0) return {...state};
     return {...state, timeRemaining: state.timeRemaining - 1};
+  }
+
+  if(action.type === 'start-timer'){
+    return {...state, scheduledCountdown: action.scheduledCountdown};
+    // return {...state, timeRemaining: state.timeRemaining - 1, scheduledCountdown: action.scheduledCountdown}; //just checking that clearInterval works
+
   }
 }
 
@@ -33,10 +40,15 @@ function App() {
   
 
   const startTimer = () => {
-    setInterval(countdown, 1000);
+    const scheduledCountdown = setInterval(countdown, 1000);
+    dispatch({type: 'start-timer', scheduledCountdown: scheduledCountdown});
   };
   //fn () => action
   //starts countdown
+
+  useEffect(()=>{
+    if(timer.timeRemaining === 0) clearInterval(timer.scheduledCountdown);
+  }, [timer.timeRemaining, timer.scheduledCountdown]);
 
 
 

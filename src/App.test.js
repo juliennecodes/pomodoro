@@ -37,5 +37,5 @@ test('timer does not go past zero', () => {
     act(()=>{jest.advanceTimersByTime(workTimerMs + 1000)});
 
     expect(screen.getByText(/00:00/)).toBeInTheDocument();
-    screen.debug();
+    // screen.debug();
 });
