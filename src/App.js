@@ -28,7 +28,11 @@ const pomodoroReducer = (state, action) => {
     // return {...state, timeRemaining: state.timeRemaining - 1, scheduledCountdown: action.scheduledCountdown}; //just checking that clearInterval works
   }
 
-  if(action.type === 'switch-session-to-break'){
+  if(action.type === 'switch-to-work-session'){
+    return {...state, timeRemaining: workTimer, session: 'work'};
+  }
+
+  if(action.type === 'switch-to-break-session'){
     return {...state, timeRemaining: breakTimer ,session: 'break'};
   }
 }
@@ -53,9 +57,16 @@ function App() {
   useEffect(()=>{
     if(timer.timeRemaining === 0) {
       clearInterval(timer.scheduledCountdown);
-      dispatch({type: 'switch-session-to-break'});
+      
+      if(timer.session === 'work'){
+        dispatch({type: 'switch-to-break-session'});
+      }
+
+      if(timer.session === 'break'){
+        dispatch({type: 'switch-to-work-session'});
+      }
     };
-  }, [timer.timeRemaining, timer.scheduledCountdown]);
+  }, [timer.timeRemaining, timer.session, timer.scheduledCountdown]);
 
 
 
