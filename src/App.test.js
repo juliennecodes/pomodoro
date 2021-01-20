@@ -54,15 +54,7 @@ test('when four work sessions are completed, session is changed to big break', (
     render(<App />);
     const startButton = screen.getByRole('button', {name: 'Start'});
     
-    workSession(startButton);
-    breakSession(startButton);
-
-    workSession(startButton);
-    breakSession(startButton);
-
-    workSession(startButton);
-    breakSession(startButton);
-
+    doXTimes(() => workAndBreakSession(startButton), 3);
     workSession(startButton);
 
     expect(screen.getByText(/big break/i)).toBeInTheDocument();
@@ -72,22 +64,25 @@ test('when big break timer runs out, work timer is displayed', ()=>{
     jest.useFakeTimers();
     render(<App />);
     const startButton = screen.getByRole('button', {name: 'Start'});
-    
-    workSession(startButton);
-    breakSession(startButton);
 
-    workSession(startButton);
-    breakSession(startButton);
-
-    workSession(startButton);
-    breakSession(startButton);
-
+    doXTimes(() => workAndBreakSession(startButton), 3);
     workSession(startButton);
     bigBreakSession(startButton);
 
     expect(screen.getByText(/work/i)).toBeInTheDocument();
 });
 //------------------------------------------------------------------------------
+function doXTimes(callback, x){
+    for (let i = 0; i < x; i++) {
+        callback();
+    }
+}
+
+function workAndBreakSession(startButton){
+    workSession(startButton);
+    breakSession(startButton);
+}
+
 function workSession(startButton){
     expect(screen.getByText(/work/i)).toBeInTheDocument();
     userEvent.click(startButton);
