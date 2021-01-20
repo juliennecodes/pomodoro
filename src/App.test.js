@@ -22,7 +22,6 @@ test('timer counts down', ()=>{
     const startButton = screen.getByRole('button', {name: 'Start'});
     userEvent.click(startButton);
     
-    
     act(()=>{jest.advanceTimersByTime(workTimerMs)});
     // jest.advanceTimersByTime(workTimerMs);
 
@@ -50,15 +49,89 @@ test('timer switches session when timer runs out', () => {
     act(()=>{jest.advanceTimersByTime(workTimerMs)});
 
     expect(screen.getByText(/break/i)).toBeInTheDocument();
-    screen.debug();
+    // screen.debug();
 
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(breakTimerMs)});
+    expect(screen.getByText(/work/i)).toBeInTheDocument();
+    // screen.debug();
+});
+
+
+test('when four work sessions are completed, session is changed to big break', ()=>{
+    jest.useFakeTimers();
+    render(<App />);
+    const startButton = screen.getByRole('button', {name: 'Start'});
+    
+    // workBreakInterval(startButton);
+    expect(screen.getByText(/work/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(workTimerMs)});
+    expect(screen.getByText(/break/i)).toBeInTheDocument();
     userEvent.click(startButton);
     act(()=>{jest.advanceTimersByTime(breakTimerMs)});
 
     expect(screen.getByText(/work/i)).toBeInTheDocument();
-    screen.debug();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(workTimerMs)});
+    expect(screen.getByText(/break/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(breakTimerMs)});
+
+    expect(screen.getByText(/work/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(workTimerMs)});
+    expect(screen.getByText(/break/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(breakTimerMs)});
+
+    expect(screen.getByText(/work/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(workTimerMs)});
+
+    expect(screen.getByText(/big break/i)).toBeInTheDocument();
 });
 
+test('when big break timer runs out, work timer is displayed', ()=>{
+    jest.useFakeTimers();
+    render(<App />);
+    const startButton = screen.getByRole('button', {name: 'Start'});
+    
+    // workBreakInterval(startButton);
+    expect(screen.getByText(/work/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(workTimerMs)});
+    expect(screen.getByText(/break/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(breakTimerMs)});
+
+    expect(screen.getByText(/work/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(workTimerMs)});
+    expect(screen.getByText(/break/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(breakTimerMs)});
+
+    expect(screen.getByText(/work/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(workTimerMs)});
+    expect(screen.getByText(/break/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(breakTimerMs)});
+
+    expect(screen.getByText(/work/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(workTimerMs)});
+
+    expect(screen.getByText(/big break/i)).toBeInTheDocument();
+    userEvent.click(startButton);
+    act(()=>{jest.advanceTimersByTime(bigBreakTimerMs)});
+
+    expect(screen.getByText(/work/i)).toBeInTheDocument();
+
+
+    
+});
 //------------------------------------------------------------------------------
 function stringTimer(timeRemaining){
     const minutesRemaining = Math.floor(timeRemaining / 60);
