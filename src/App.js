@@ -1,5 +1,4 @@
-import {useState, useEffect, useReducer} from 'react';
-import { Pomodoro } from './components/Pomodoro';
+import {useEffect, useReducer} from 'react';
 import {Pomodoros} from './components/Pomodoros';
 import {Timer} from './components/Timer';
 import { TimerControls } from './components/TimerControls';
@@ -88,7 +87,7 @@ function App() {
     <div className="App">
       <h1>Pomodoro</h1>
       <p>{timer.session}</p>
-      <Pomodoros completedPomodoros={timer.completedPomodoros}/>
+      <Pomodoros session={timer.session} completedPomodoros={timer.completedPomodoros}/>
       <Timer timeRemaining={timer.timeRemaining} />
       <TimerControls startTimer={startTimer} />
     </div>
