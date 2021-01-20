@@ -12,9 +12,12 @@ const workTimerMs = workTimer * 1000;
 const breakTimerMs = breakTimer * 1000;
 const bigBreakTimerMs = bigBreakTimer * 1000;
 
-test('timer counts down', ()=>{
+beforeEach(()=>{
     jest.useFakeTimers();
     render(<App />);
+});
+
+test('timer counts down', ()=>{
     const startButton = screen.getByRole('button', {name: 'Start'});
     
     workSession(startButton);
@@ -22,17 +25,13 @@ test('timer counts down', ()=>{
 });
 
 test('timer does not go past zero', () => {
-    jest.useFakeTimers();
-    render(<App />);
     const startButton = screen.getByRole('button', {name: 'Start'});
     
     workSession(startButton);
-    expect(screen.getByText(/break/i)).toBeInTheDocument();
+    expect(screen.queryByText(/-1/)).not.toBeInTheDocument();
 });
 
 test('when work session ends, session is changed to break', ()=>{
-    jest.useFakeTimers();
-    render(<App />);
     const startButton = screen.getByRole('button', {name: 'Start'});
 
     workSession(startButton);
@@ -40,8 +39,6 @@ test('when work session ends, session is changed to break', ()=>{
 });
 
 test('when break session ends, session is changed to work', ()=>{
-    jest.useFakeTimers();
-    render(<App />);
     const startButton = screen.getByRole('button', {name: 'Start'});
 
     workSession(startButton);
@@ -50,8 +47,6 @@ test('when break session ends, session is changed to work', ()=>{
 });
 
 test('when four work sessions are completed, session is changed to big break', ()=>{
-    jest.useFakeTimers();
-    render(<App />);
     const startButton = screen.getByRole('button', {name: 'Start'});
     
     doXTimes(() => workAndBreakSession(startButton), 3);
@@ -61,8 +56,6 @@ test('when four work sessions are completed, session is changed to big break', (
 });
 
 test('when big break timer runs out, work timer is displayed', ()=>{
-    jest.useFakeTimers();
-    render(<App />);
     const startButton = screen.getByRole('button', {name: 'Start'});
 
     doXTimes(() => workAndBreakSession(startButton), 3);
