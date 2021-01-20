@@ -1,7 +1,7 @@
-export function TimerControls({startTimer}){
-    return (
-        <>
-            <button onClick={startTimer}>Start</button>
-        </>
-    )
+export function TimerControls({active, startTimer, stopTimer}){
+    if(active){
+        return(<button onClick={stopTimer}>Stop</button>)
+    } else {
+        return(<button onClick={startTimer}>Start</button>)
+    }
 };

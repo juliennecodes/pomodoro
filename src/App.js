@@ -12,6 +12,7 @@ const breakTimer = 2;
 const bigBreakTimer = 5;
 
 const initialTimer = {
+  active: false,
   session: 'work',
   timeRemaining: workTimer,
   completedPomodoros: 0,
@@ -25,19 +26,23 @@ const pomodoroReducer = (state, action) => {
   }
 
   if(action.type === 'start-timer'){
-    return {...state, scheduledCountdown: action.scheduledCountdown};
+    return {...state, active: true, scheduledCountdown: action.scheduledCountdown};
     // return {...state, timeRemaining: state.timeRemaining - 1, scheduledCountdown: action.scheduledCountdown}; //just checking that clearInterval works
   }
 
+  if(action.type === 'stop-timer'){
+    return {...state, active: false, timeRemaining: workTimer, scheduledCountdown: null};
+  }
+
   if(action.type === 'switch-to-work-session'){
-    return {...state, timeRemaining: workTimer, session: 'work'};
+    return {...state, active: false, timeRemaining: workTimer, session: 'work'};
   }
 
   if(action.type === 'switch-to-break-session'){
     if(state.completedPomodoros % 4 === 0){
-      return {...state, timeRemaining: bigBreakTimer, session: 'big break'};
+      return {...state, active: false, timeRemaining: bigBreakTimer, session: 'big break'};
     } else {
-      return {...state, timeRemaining: breakTimer ,session: 'break'};
+      return {...state, active: false, timeRemaining: breakTimer ,session: 'break'};
     }
   }
 
@@ -60,6 +65,11 @@ function App() {
   };
   //fn () => action
   //starts countdown
+
+  const stopTimer = () => {
+    clearInterval(timer.scheduledCountdown);
+    dispatch({type: 'stop-timer'});
+  }
 
   useEffect(()=>{
     if(timer.timeRemaining === 0) {
@@ -89,7 +99,7 @@ function App() {
       <p>{timer.session}</p>
       <Pomodoros session={timer.session} completedPomodoros={timer.completedPomodoros}/>
       <Timer timeRemaining={timer.timeRemaining} />
-      <TimerControls startTimer={startTimer} />
+      <TimerControls active={timer.active} startTimer={startTimer} stopTimer={stopTimer} />
     </div>
   );
 }
