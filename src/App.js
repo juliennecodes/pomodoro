@@ -2,6 +2,7 @@ import {useEffect, useReducer} from 'react';
 import {Pomodoros} from './components/Pomodoros';
 import {Timer} from './components/Timer';
 import { TimerControls } from './components/TimerControls';
+import notification from './assets/notification.wav';
 
 // const workTimer = 1500;
 // const breakTimer = 300;
@@ -17,6 +18,11 @@ const initialTimer = {
   timeRemaining: workTimer,
   completedPomodoros: 0,
   scheduledCountdown: null,
+};
+
+const notificationAudio = new Audio(notification);
+const playSound = (sound) => {
+  sound.play();
 };
 
 const pomodoroReducer = (state, action) => {
@@ -83,6 +89,7 @@ function App() {
   useEffect(()=>{
     if(timer.timeRemaining === 0) {
       clearInterval(timer.scheduledCountdown);
+      playSound(notificationAudio);
 
       if(timer.session === 'work'){
         dispatch({type: 'add-pomodoro'}); 
