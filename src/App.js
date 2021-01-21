@@ -33,7 +33,6 @@ const pomodoroReducer = (state, action) => {
 
   if(action.type === 'start-timer'){
     return {...state, active: true, scheduledCountdown: action.scheduledCountdown};
-    // return {...state, timeRemaining: state.timeRemaining - 1, scheduledCountdown: action.scheduledCountdown}; //just checking that clearInterval works
   }
 
   if(action.type === 'stop-timer'){
@@ -67,14 +66,11 @@ function App() {
   const countdown = () => {
     dispatch({type: 'time-decrease'});
   };
-  //fn () => action
 
   const startTimer = () => {
     const scheduledCountdown = setInterval(countdown, 1000);
     dispatch({type: 'start-timer', scheduledCountdown: scheduledCountdown});
   };
-  //fn () => action
-  //starts countdown
 
   const stopTimer = () => {
     clearInterval(timer.scheduledCountdown);
@@ -92,12 +88,7 @@ function App() {
       // playSound(notificationAudio);
 
       if(timer.session === 'work'){
-        dispatch({type: 'add-pomodoro'}); 
-        //is this kosher? two dispatches one after another, should I add logic in useReducer instead
-        //doesn't this update state and thus cause re-render
-        //but I want the below to be a batched effect with the above
-        //should I make it into one dispatch
-        //or will the following dispatch take into account the above state changes?
+        dispatch({type: 'add-pomodoro'});
         dispatch({type: 'switch-to-break-session'});
       }
 
