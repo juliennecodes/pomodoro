@@ -34,6 +34,10 @@ const pomodoroReducer = (state, action) => {
     return {...state, active: false, timeRemaining: workTimer, scheduledCountdown: null};
   }
 
+  if(action.type === 'skip-timer'){
+    return {...state, active: false, session: 'work', timeRemaining: workTimer, scheduledCountdown: null};
+  }
+
   if(action.type === 'switch-to-work-session'){
     return {...state, active: false, timeRemaining: workTimer, session: 'work'};
   }
@@ -71,6 +75,11 @@ function App() {
     dispatch({type: 'stop-timer'});
   }
 
+  const skipTimer = () => {
+    clearInterval(timer.scheduledCountdown);
+    dispatch({type: 'skip-timer'});
+  };
+
   useEffect(()=>{
     if(timer.timeRemaining === 0) {
       clearInterval(timer.scheduledCountdown);
@@ -99,7 +108,7 @@ function App() {
       <p>{timer.session}</p>
       <Pomodoros session={timer.session} completedPomodoros={timer.completedPomodoros}/>
       <Timer timeRemaining={timer.timeRemaining} />
-      <TimerControls active={timer.active} startTimer={startTimer} stopTimer={stopTimer} />
+      <TimerControls active={timer.active} session={timer.session} startTimer={startTimer} stopTimer={stopTimer} skipTimer={skipTimer}/>
     </div>
   );
 }

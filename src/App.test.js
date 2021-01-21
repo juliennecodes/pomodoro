@@ -81,6 +81,7 @@ test('start button is replaced with stop button when clicked during work session
 test('start button is replaced with skip button during break sessions', ()=>{
     const startButton = screen.getByRole('button', {name: 'Start'});
 
+    workSession(startButton);
     expect(screen.getByText(/Start/)).toBeInTheDocument();
     userEvent.click(startButton);
     expect(screen.queryByText(/Start/)).not.toBeInTheDocument();
