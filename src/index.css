@@ -1,0 +1,64 @@
+/*--------------------------------------------------------------
+Normalizing Styles
+--------------------------------------------------------------*/
+body, h1, h2, h3, h4, h5, ul, li, a, p{
+    margin: 0;
+    padding: 0;
+    font-weight: 300;
+    font-size: 15px;
+    box-sizing: border-box;
+  }
+  
+  ul {
+    list-style-type: none;
+  }
+  
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+/*--------------------------------------------------------------
+Colour
+--------------------------------------------------------------*/
+body {
+  /* color: hsl(354, 59%, 57%); */
+  /* color: hsl(102, 44%, 49%); */
+  color: hsl(0, 0%, 0%);
+}
+/*--------------------------------------------------------------
+Typography
+--------------------------------------------------------------*/
+body, h1{
+  font-family: 'Varela Round', sans-serif;
+}
+
+.title{
+  font-size: 12px;
+}
+
+.session{
+  font-size: 12px;
+}
+
+.timer {
+  font-size: 120px;
+}
+/*--------------------------------------------------------------
+Layout
+--------------------------------------------------------------*/
+.App {
+  max-width: 600px;
+  margin: 0px auto;
+  height: 90vh;
+  padding: 24px 36px;
+}
+
+.pomodoros {
+  display: flex;
+  flex-direction: row;
+}
+
+.pomodoro {
+  flex: none;
+}

@@ -3,6 +3,7 @@ import {Pomodoros} from './components/Pomodoros';
 import {Timer} from './components/Timer';
 import { TimerControls } from './components/TimerControls';
 // import notification from './assets/notification.wav';
+import './App.css';
 
 // const workTimer = 1500;
 // const breakTimer = 300;
@@ -102,8 +103,8 @@ function App() {
 
   return ( 
     <div className="App">
-      <h1>Pomodoro</h1>
-      <p>{timer.session}</p>
+      <h1 className="title">Pomodoro</h1>
+      <p className="session">{timer.session}</p>
       <Pomodoros session={timer.session} completedPomodoros={timer.completedPomodoros}/>
       <Timer timeRemaining={timer.timeRemaining} />
       <TimerControls active={timer.active} session={timer.session} startTimer={startTimer} stopTimer={stopTimer} skipTimer={skipTimer}/>

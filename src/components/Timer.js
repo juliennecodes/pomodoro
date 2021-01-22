@@ -6,6 +6,6 @@ export function Timer({timeRemaining}){
     const seconds = `${secondsRemaining}`.padStart(2, "0");
 
     return(
-        <p>{`${minutes}:${seconds}`}</p>
+        <p className="timer">{`${minutes}:${seconds}`}</p>
     )
 }
