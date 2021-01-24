@@ -6,21 +6,21 @@ body, h1, button{
     text-transform: uppercase;
   }
   
-  .title{
-    font-size: 10px;
-    writing-mode: vertical-lr;
-    text-orientation: upright;
-  }
-  
-  .session{
-    font-size: 12px;
-  }
-  
-  .timer {
-    font-size: 24px;
-  }
-  
-  .timer-control{
-    font-size: 12px;
-    text-transform: uppercase;
-  }
+.title{
+  font-size: 10px;
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+}
+
+.session{
+  font-size: 12px;
+}
+
+.timer {
+  font-size: 24px;
+}
+
+.timer-control{
+  font-size: 12px;
+  text-transform: uppercase;
+}

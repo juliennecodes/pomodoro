@@ -8,19 +8,20 @@ Layout
     padding: 24px 36px;
   }
   
-  .pomodoros {
-    display: flex;
-    flex-direction: row;
-  }
-  
-  .pomodoro {
-    flex: none;
-  }
-  
-  .timer {
-    text-align: center;
-  }
-  
-  .timer-control {
-    justify-self: right;
-  }
+.pomodoro-slots,.filled-pomodoros {
+  display: flex;
+  flex-direction: row;
+}
+
+.pomodoro-slots, .filled-pomodoros {
+  position: absolute;
+  top: 0;
+}
+
+.timer {
+  text-align: center;
+}
+
+.timer-control {
+  justify-self: right;
+}

@@ -25,27 +25,28 @@ Positioning
 --------------------------------------------------------------*/
 .App {
     position: relative;
-}
-.session {
+  }
+  .session {
     position: absolute;
-    bottom: 24px;
-}
-
-.pomodoros {
+    bottom: 22px;
+  }
+  
+  .pomodoros {
     position: absolute;
-    top: -14px;
-}
-
-.pomodoro:nth-child(1), .pomodoro:nth-child(2), .pomodoro:nth-child(3) {
+    top: -12px;
+  }
+  
+  .pomodoro-slot:nth-child(1), .pomodoro-slot:nth-child(2), .pomodoro-slot:nth-child(3), 
+  .pomodoro:nth-child(1), .pomodoro:nth-child(2), .pomodoro:nth-child(3) {
     padding-right: 8px;
-}
-
-.timer {
+  }
+  
+  .timer {
     justify-self: center;
     align-self: center;
-}
-
-.timer-control {
+  }
+  
+  .timer-control {
     align-self: center;
     position: relative;
-}
+  }
