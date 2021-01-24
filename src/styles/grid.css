@@ -1,0 +1,51 @@
+/*--------------------------------------------------------------
+Grid
+--------------------------------------------------------------*/
+.App {
+    display: grid;
+    grid: 25vh 1fr 20vh 20vh 1fr 25vh / 2fr 2fr 3fr 2fr 2fr;
+    grid-template-areas: 
+    "title a a a a"
+    "b b b b b"
+    "c session timer timer-control d"
+    "e pomodoros timer timer-control f"
+    "g g g g g "
+    "h h h h h"
+    ;
+}
+
+.title {grid-area: title;}
+.session {grid-area: session;}
+.pomodoros {grid-area: pomodoros;}
+.timer {grid-area: timer;}
+.timer-control {grid-area: timer-control;}
+
+/*--------------------------------------------------------------
+Positioning
+--------------------------------------------------------------*/
+.App {
+    position: relative;
+}
+.session {
+    position: absolute;
+    bottom: 24px;
+}
+
+.pomodoros {
+    position: absolute;
+    top: -14px;
+}
+
+.pomodoro:nth-child(1), .pomodoro:nth-child(2), .pomodoro:nth-child(3) {
+    padding-right: 8px;
+}
+
+.timer {
+    justify-self: center;
+    align-self: center;
+}
+
+.timer-control {
+    align-self: center;
+    position: relative;
+}

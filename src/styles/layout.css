@@ -1,0 +1,26 @@
+/*--------------------------------------------------------------
+Layout
+--------------------------------------------------------------*/
+.App {
+    max-width: 100%;
+    margin: 0px auto;
+    height: 90vh;
+    padding: 24px 36px;
+  }
+  
+  .pomodoros {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .pomodoro {
+    flex: none;
+  }
+  
+  .timer {
+    text-align: center;
+  }
+  
+  .timer-control {
+    justify-self: right;
+  }

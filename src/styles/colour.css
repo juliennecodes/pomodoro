@@ -1,0 +1,20 @@
+/*--------------------------------------------------------------
+Colour
+--------------------------------------------------------------*/
+body {
+    color: hsl(354, 59%, 57%);
+    /* color: hsl(102, 44%, 49%); */
+    /* color: hsl(0, 0%, 0%); */
+    /* color: hsl(0, 0%, 100%); */
+  }
+  
+  .timer-control {
+    background-color: hsl(354, 59%, 57%);
+    border: 2px solid hsl(354, 59%, 57%);
+    border-radius: 3px;
+    color: hsl(0, 0%, 100%);
+  }
+  
+  .timer-control:focus{
+    outline: 0;
+  }
