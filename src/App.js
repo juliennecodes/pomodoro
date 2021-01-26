@@ -41,17 +41,19 @@ const pomodoroReducer = (state, action) => {
 
   if(action.type === 'skip-timer'){
     return {...state, active: false, session: 'work', timeRemaining: workTimer, scheduledCountdown: null};
-  }
+  }  
 
-  if(action.type === 'switch-to-work-session'){
-    return {...state, active: false, timeRemaining: workTimer, session: 'work'};
-  }
+  if(action.type === 'switch-session'){
+    if(state.session === 'work'){
+      if(state.completedPomodoros % 4 === 0){
+        return {...state, active: false, session: 'big break', timeRemaining: bigBreakTimer};
+      } else {
+        return {...state, active: false, session: 'break', timeRemaining: breakTimer};
+      }
+    }
 
-  if(action.type === 'switch-to-break-session'){
-    if(state.completedPomodoros % 4 === 0){
-      return {...state, active: false, timeRemaining: bigBreakTimer, session: 'big break'};
-    } else {
-      return {...state, active: false, timeRemaining: breakTimer ,session: 'break'};
+    if(state.session === 'break' || state.session === 'big break'){
+      return {...state, active: false, session: 'work', timeRemaining: workTimer};
     }
   }
 
@@ -82,23 +84,21 @@ function App() {
     dispatch({type: 'skip-timer'});
   };
 
-  useEffect(()=>{
-    if(timer.timeRemaining === 0) {
+  useEffect( () =>{
+    if(timer.timeRemaining === 0){
       clearInterval(timer.scheduledCountdown);
       playSound(notificationAudio);
+    }
+  });
 
+  useEffect(()=>{
+    if(timer.timeRemaining === 0){
       if(timer.session === 'work'){
         dispatch({type: 'add-pomodoro'});
-        dispatch({type: 'switch-to-break-session'});
       }
-
-      if(timer.session === 'break' || timer.session === 'big break'){
-        dispatch({type: 'switch-to-work-session'});
-      }
-    };
-  }, [timer.timeRemaining, timer.session, timer.scheduledCountdown]);
-
-
+      dispatch({type: 'switch-session'});
+    }
+  });
 
   return ( 
     <div className="App">
