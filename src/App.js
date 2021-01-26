@@ -1,4 +1,4 @@
-import {useEffect, useReducer} from 'react';
+import {useEffect, useReducer, useRef} from 'react';
 import {Pomodoros} from './components/Pomodoros';
 import {Timer} from './components/Timer';
 import { TimerControls } from './components/TimerControls';
@@ -17,7 +17,6 @@ const initialTimer = {
   session: 'work',
   timeRemaining: workTimer,
   completedPomodoros: 0,
-  scheduledCountdown: null,
 };
 
 const notificationAudio = new Audio(notification);
@@ -32,15 +31,15 @@ const pomodoroReducer = (state, action) => {
   }
 
   if(action.type === 'start-timer'){
-    return {...state, active: true, scheduledCountdown: action.scheduledCountdown};
+    return {...state, active: true};
   }
 
   if(action.type === 'stop-timer'){
-    return {...state, active: false, timeRemaining: workTimer, scheduledCountdown: null};
+    return {...state, active: false, timeRemaining: workTimer};
   }
 
   if(action.type === 'skip-timer'){
-    return {...state, active: false, session: 'work', timeRemaining: workTimer, scheduledCountdown: null};
+    return {...state, active: false, session: 'work', timeRemaining: workTimer};
   }  
 
   if(action.type === 'switch-session'){
@@ -60,33 +59,39 @@ const pomodoroReducer = (state, action) => {
 
 function App() {
   const [timer, dispatch] = useReducer(pomodoroReducer, initialTimer);
+  const scheduledCountdown = useRef();
 
   const countdown = () => {
     dispatch({type: 'time-decrease'});
   };
 
   const startTimer = () => {
-    const scheduledCountdown = setInterval(countdown, 1000);
-    dispatch({type: 'start-timer', scheduledCountdown: scheduledCountdown});
+    const functionId = setInterval(countdown, 1000);
+    scheduledCountdown.current = functionId;
+    dispatch({type: 'start-timer'});
   };
 
   const stopTimer = () => {
-    clearInterval(timer.scheduledCountdown);
+    clearInterval(scheduledCountdown.current);
     dispatch({type: 'stop-timer'});
   }
 
   const skipTimer = () => {
-    clearInterval(timer.scheduledCountdown);
+    clearInterval(scheduledCountdown.current);
     dispatch({type: 'skip-timer'});
   };
 
   useEffect( () =>{
     if(timer.timeRemaining === 0){
-      clearInterval(timer.scheduledCountdown);
+      clearInterval(scheduledCountdown.current);
       playSound(notificationAudio);
       dispatch({type: 'switch-session'});
     }
   });
+
+  useEffect(()=>{
+    return () => clearInterval(scheduledCountdown.current);
+  }, []);
 
   return ( 
     <div className="App">
