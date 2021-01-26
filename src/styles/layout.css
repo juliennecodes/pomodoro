@@ -8,12 +8,12 @@ Layout
     padding: 24px 36px;
   }
   
-.pomodoro-slots,.filled-pomodoros {
+.pomodorosUl{
   display: flex;
   flex-direction: row;
 }
 
-.pomodoro-slots, .filled-pomodoros {
+.pomodorosUl{
   position: absolute;
   top: 0;
 }

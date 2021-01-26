@@ -36,8 +36,7 @@ Positioning
     top: -12px;
   }
   
-  .pomodoro-slot:nth-child(1), .pomodoro-slot:nth-child(2), .pomodoro-slot:nth-child(3), 
-  .pomodoro:nth-child(1), .pomodoro:nth-child(2), .pomodoro:nth-child(3) {
+  .pomodoro:nth-child(1), .pomodoro:nth-child(2), .pomodoro:nth-child(3){
     padding-right: 8px;
   }
   
