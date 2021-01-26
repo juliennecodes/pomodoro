@@ -87,7 +87,7 @@ function App() {
       playSound(notificationAudio);
       dispatch({type: 'switch-session'});
     }
-  });
+  }, [timer.timeRemaining]);
 
   useEffect(()=>{
     return () => clearInterval(scheduledCountdown.current);
