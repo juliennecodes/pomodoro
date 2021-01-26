@@ -33,3 +33,10 @@ export function Pomodoros({session, completedPomodoros}){
         )
     }
 }
+
+//for each pomodoro, fill or not filled
+//for loop
+//loop 1 - 4, for each, if current index is less than finished pomodoros, create filled pomodoro
+//pass as prop in single component, svg as circle or svg as path
+
+

@@ -16,6 +16,10 @@ export function Pomodoro(){
 
 // export function Pomodoro(){
 //     return(
-//         <p>:)</p>
+//         <li>
+//             <p>
+//             &#127813;
+//             </p>
+//         </li>
 //     )
 // }
