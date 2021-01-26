@@ -14,6 +14,15 @@ const bigBreakTimerMs = bigBreakTimer * 1000;
 
 const regexWorkTimer = new RegExp(stringTimer(workTimer));
 
+beforeAll(()=>{
+    jest.spyOn(HTMLMediaElement.prototype, 'play').mockImplementation(()=>{});
+});
+//when I call play on an HTML media element, 
+//replace that play function with the callback in mockImplentation
+//play is implemented in the browser but not in node
+//therefore, it creates a not implemented error in testing
+//mock callback replaces play code in app in test environment
+//fix to error - Error: Not implemented: HTMLMediaElement.prototype.play
 
 beforeEach(()=>{
     jest.useFakeTimers();
