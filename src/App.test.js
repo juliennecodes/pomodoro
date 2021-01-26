@@ -1,8 +1,8 @@
-import { act, render } from '@testing-library/react';
-import App from './App';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event'
-import '@testing-library/jest-dom/extend-expect';
+import { act, render } from "@testing-library/react";
+import App from "./App";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import "@testing-library/jest-dom/extend-expect";
 
 const workTimer = 5;
 const breakTimer = 2;
@@ -14,154 +14,193 @@ const bigBreakTimerMs = bigBreakTimer * 1000;
 
 const regexWorkTimer = new RegExp(stringTimer(workTimer));
 
-beforeAll(()=>{
-    jest.spyOn(HTMLMediaElement.prototype, 'play').mockImplementation(()=>{});
-});
-//when I call play on an HTML media element, 
-//replace that play function with the callback in mockImplentation
-//play is implemented in the browser but not in node
-//therefore, it creates a not implemented error in testing
-//mock callback replaces play code in app in test environment
-//fix to error - Error: Not implemented: HTMLMediaElement.prototype.play
-
-beforeEach(()=>{
-    jest.useFakeTimers();
-    render(<App />);
+beforeAll(() => {
+  jest.spyOn(HTMLMediaElement.prototype, "play").mockImplementation(() => {});
 });
 
-test('timer counts down', ()=>{
-    const startButton = screen.getByRole('button', {name: 'Start'});
-    
-    workSession(startButton);
-    expect(screen.getByText(/break/i)).toBeInTheDocument();
+beforeEach(() => {
+  jest.useFakeTimers();
 });
 
-test('timer does not go past zero', () => {
-    const startButton = screen.getByRole('button', {name: 'Start'});
-    
-    workSession(startButton);
-    expect(screen.queryByText(/-1/)).not.toBeInTheDocument();
+test("when work session ends, session is changed to break", () => {
+  render(<App />);
+  const startButton = screen.getByRole("button", { name: "Start" });
+
+  finishOneWorkSession(startButton);
+
+  expect(screen.getByText(/break/)).toBeInTheDocument();
 });
 
-test('when work session ends, session is changed to break', ()=>{
-    const startButton = screen.getByRole('button', {name: 'Start'});
+test("when break session ends, session is changed to work", () => {
+  render(<App />);
+  const startButton = screen.getByRole("button", { name: "Start" });
 
-    workSession(startButton);
-    expect(screen.getByText(/break/i)).toBeInTheDocument();
+  finishOneWorkSession(startButton);
+  finishOneBreakSession(startButton);
+
+  expect(screen.getByText(/work/)).toBeInTheDocument();
 });
 
-test('when break session ends, session is changed to work', ()=>{
-    const startButton = screen.getByRole('button', {name: 'Start'});
+test("when four work sessions end, session is changed to big break", () => {
+  render(<App />);
+  const startButton = screen.getByRole("button", { name: "Start" });
 
-    workSession(startButton);
-    breakSession(startButton);
-    expect(screen.getByText(/work/i)).toBeInTheDocument();
+  doXTimes(() => finishASetOfWorkAndBreakSession(startButton), 3);
+  finishOneWorkSession(startButton);
+
+  expect(screen.getByText(/big break/)).toBeInTheDocument();
 });
 
-test('when four work sessions are completed, session is changed to big break', ()=>{
-    const startButton = screen.getByRole('button', {name: 'Start'});
-    
-    doXTimes(() => workAndBreakSession(startButton), 3);
-    workSession(startButton);
+test("when big break session ends, session is changed to work", () => {
+  render(<App />);
+  const startButton = screen.getByRole("button", { name: "Start" });
 
-    expect(screen.getByText(/big break/i)).toBeInTheDocument();
+  doXTimes(() => finishASetOfWorkAndBreakSession(startButton), 3);
+  finishOneWorkSession(startButton);
+  finishOneBigBreakSession(startButton);
+
+  expect(screen.getByText(/work/)).toBeInTheDocument();
 });
 
-test('when big break timer runs out, work timer is displayed', ()=>{
-    const startButton = screen.getByRole('button', {name: 'Start'});
+test("start button is replaced with stop button when clicked during work sessions", () => {
+  render(<App />);
+  const startButton = screen.getByRole("button", { name: "Start" });
 
-    doXTimes(() => workAndBreakSession(startButton), 3);
-    workSession(startButton);
-    bigBreakSession(startButton);
+  userEvent.click(startButton);
 
-    expect(screen.getByText(/work/i)).toBeInTheDocument();
+  expect(screen.queryByText(/Start/)).not.toBeInTheDocument();
+  expect(screen.getByText(/Stop/)).toBeInTheDocument();
 });
 
-test('start button is replaced with stop button when clicked during work sessions', () => {
-    const startButton = screen.getByRole('button', {name: 'Start'});
+test("start button is replaced with skip button during break sessions", () => {
+  render(<App />);
+  const startButton = screen.getByRole("button", { name: "Start" });
 
-    expect(screen.getByText(/Start/)).toBeInTheDocument();
-    userEvent.click(startButton);
-    expect(screen.queryByText(/Start/)).not.toBeInTheDocument();
-    expect(screen.getByText(/Stop/)).toBeInTheDocument();
+  finishOneWorkSession(startButton);
 
+  expect(screen.getByText(/break/)).toBeInTheDocument();
+
+  userEvent.click(startButton);
+
+  expect(screen.queryByText(/Start/)).not.toBeInTheDocument();
+  expect(screen.getByText(/Skip/)).toBeInTheDocument();
 });
 
-test('start button is replaced with skip button during break sessions', ()=>{
-    const startButton = screen.getByRole('button', {name: 'Start'});
+test("start button is replaced with skip button during big break sessions", () => {
+  render(<App />);
+  const startButton = screen.getByRole("button", { name: "Start" });
 
-    workSession(startButton);
-    expect(screen.getByText(/Start/)).toBeInTheDocument();
-    userEvent.click(startButton);
-    expect(screen.queryByText(/Start/)).not.toBeInTheDocument();
-    expect(screen.getByText(/Skip/)).toBeInTheDocument();
+  doXTimes(() => finishASetOfWorkAndBreakSession(startButton), 3);
+  finishOneWorkSession(startButton);
+
+  expect(screen.getByText(/big break/)).toBeInTheDocument();
+  expect(screen.getByText(/Start/)).toBeInTheDocument();
+
+  userEvent.click(startButton);
+
+  expect(screen.queryByText(/Start/)).not.toBeInTheDocument();
+  expect(screen.getByText(/Skip/)).toBeInTheDocument();
 });
 
-test('stop button resets the timer when the work session is interrupted', ()=>{
-    const startButton = screen.getByRole('button', {name: 'Start'});
+test("stop button resets the timer when the work session is interrupted", () => {
+  render(<App />);
+  const startButton = screen.getByRole("button", { name: "Start" });
 
-    expect(screen.getByText(/work/i)).toBeInTheDocument();
-    userEvent.click(startButton);
-    act(()=> jest.advanceTimersByTime(1000));
-    expect(screen.getByText(/Stop/)).toBeInTheDocument();
+  userEvent.click(startButton);
+  act(() => jest.advanceTimersByTime(1000));
 
-    const stopButton = screen.getByRole('button', {name: 'Stop'});
-    userEvent.click(stopButton);
+  expect(screen.getByText(/Stop/)).toBeInTheDocument();
 
-    expect(screen.getByText(regexWorkTimer)).toBeInTheDocument();
+  const stopButton = screen.getByRole("button", { name: "Stop" });
 
+  userEvent.click(stopButton);
+
+  expect(screen.getByText(regexWorkTimer)).toBeInTheDocument();
 });
 
-test('skip button skips the break session', ()=>{
-    const startButton = screen.getByRole('button', {name: 'Start'});
+test("skip button skips the break session", () => {
+  render(<App />);
+  const startButton = screen.getByRole("button", { name: "Start" });
 
-    workSession(startButton);
-    expect(screen.getByText(/break/)).toBeInTheDocument();
-    userEvent.click(startButton);
-    act(()=> jest.advanceTimersByTime(1000));
-    expect(screen.getByText(/Skip/)).toBeInTheDocument();
+  finishOneWorkSession(startButton);
 
-    const skipButton = screen.getByRole('button', {name: 'Skip'});
-    userEvent.click(skipButton);
+  expect(screen.getByText(/break/)).toBeInTheDocument();
 
-    expect(screen.getByText(/work/)).toBeInTheDocument();
+  userEvent.click(startButton);
+  act(() => jest.advanceTimersByTime(1000));
+
+  expect(screen.getByText(/Skip/)).toBeInTheDocument();
+
+  const skipButton = screen.getByRole("button", { name: "Skip" });
+
+  userEvent.click(skipButton);
+
+  expect(screen.getByText(/work/)).toBeInTheDocument();
 });
+
+test("skip button skips the big break session", () => {
+  render(<App />);
+  const startButton = screen.getByRole("button", { name: "Start" });
+
+  doXTimes(() => finishASetOfWorkAndBreakSession(startButton), 3);
+  finishOneWorkSession(startButton);
+
+  expect(screen.getByText(/big break/)).toBeInTheDocument();
+
+  userEvent.click(startButton);
+  act(() => jest.advanceTimersByTime(1000));
+
+  expect(screen.getByText(/Skip/)).toBeInTheDocument();
+
+  const skipButton = screen.getByRole("button", { name: "Skip" });
+
+  userEvent.click(skipButton);
+
+  expect(screen.getByText(/work/)).toBeInTheDocument();
+});
+
 //------------------------------------------------------------------------------
-function doXTimes(callback, x){
-    for (let i = 0; i < x; i++) {
-        callback();
-    }
+function doXTimes(callback, x) {
+  for (let i = 0; i < x; i++) {
+    callback();
+  }
 }
 
-function workAndBreakSession(startButton){
-    workSession(startButton);
-    breakSession(startButton);
+function finishASetOfWorkAndBreakSession(startButton) {
+  finishOneWorkSession(startButton);
+  finishOneBreakSession(startButton);
 }
 
-function workSession(startButton){
-    expect(screen.getByText(/work/i)).toBeInTheDocument();
-    userEvent.click(startButton);
-    act(()=>{jest.advanceTimersByTime(workTimerMs)});
-};
-
-function breakSession(startButton){
-    expect(screen.getByText(/break/i)).toBeInTheDocument();
-    userEvent.click(startButton);
-    act(()=>{jest.advanceTimersByTime(breakTimerMs)});
+function finishOneWorkSession(startButton) {
+  expect(screen.getByText(/work/)).toBeInTheDocument();
+  userEvent.click(startButton);
+  act(() => {
+    jest.advanceTimersByTime(workTimerMs);
+  });
 }
 
-function bigBreakSession(startButton){
-    expect(screen.getByText(/big break/i)).toBeInTheDocument();
-    userEvent.click(startButton);
-    act(()=>{jest.advanceTimersByTime(bigBreakTimerMs)});
+function finishOneBreakSession(startButton) {
+  expect(screen.getByText(/break/)).toBeInTheDocument();
+  userEvent.click(startButton);
+  act(() => {
+    jest.advanceTimersByTime(breakTimerMs);
+  });
 }
 
-function stringTimer(timeRemaining){
-    const minutesRemaining = Math.floor(timeRemaining / 60);
-    const secondsRemaining = timeRemaining % 60;
+function finishOneBigBreakSession(startButton) {
+  expect(screen.getByText(/big break/)).toBeInTheDocument();
+  userEvent.click(startButton);
+  act(() => {
+    jest.advanceTimersByTime(bigBreakTimerMs);
+  });
+}
 
-    const minutes = `${minutesRemaining}`.padStart(2, "0");
-    const seconds = `${secondsRemaining}`.padStart(2, "0");
+function stringTimer(timeRemaining) {
+  const minutesRemaining = Math.floor(timeRemaining / 60);
+  const secondsRemaining = timeRemaining % 60;
 
-    return `${minutes}:${seconds}`;
+  const minutes = `${minutesRemaining}`.padStart(2, "0");
+  const seconds = `${secondsRemaining}`.padStart(2, "0");
+
+  return `${minutes}:${seconds}`;
 }
