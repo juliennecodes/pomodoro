@@ -45,20 +45,28 @@ const pomodoroReducer = (state, action) => {
 
   if(action.type === 'switch-session'){
     if(state.session === 'work'){
-      if(state.completedPomodoros % 4 === 0){
-        return {...state, active: false, session: 'big break', timeRemaining: bigBreakTimer};
+      if((state.completedPomodoros + 1) % 4 === 0){
+        //I'm not sure about this
+        //I like the previous explicit declaration that you add a pomodoro once you complete a work session
+        //but that is extra code in useEffect
+        //this way of doing things is less code in useEffect and the bulk of calculating is done in the reducer function
+        //however, I'm not sure if it's descriptive enough
+        //it is adding the pomodoro before it is added
+        //I guess it's in the same vein of thinking as if(state.timeRemaining - 1 <  0) return {...state};
+        //hmmm, what are my qualms about it,
+        //is it using the future result before you actually enact it?
+        //will I remember why I wrote this
+        //at least with the time remaining - 1, it seems pretty straightforward, if you can't decrease the time, then don't
+        //in this case, the main idea is switching session, the added pomodoro is just an incidental
+        return {...state, active: false, session: 'big break', timeRemaining: bigBreakTimer, completedPomodoros: state.completedPomodoros + 1};
       } else {
-        return {...state, active: false, session: 'break', timeRemaining: breakTimer};
+        return {...state, active: false, session: 'break', timeRemaining: breakTimer, completedPomodoros: state.completedPomodoros + 1};
       }
     }
 
     if(state.session === 'break' || state.session === 'big break'){
       return {...state, active: false, session: 'work', timeRemaining: workTimer};
     }
-  }
-
-  if(action.type === 'add-pomodoro'){
-    return {...state, completedPomodoros: state.completedPomodoros + 1};
   }
 }
 
@@ -88,14 +96,6 @@ function App() {
     if(timer.timeRemaining === 0){
       clearInterval(timer.scheduledCountdown);
       playSound(notificationAudio);
-    }
-  });
-
-  useEffect(()=>{
-    if(timer.timeRemaining === 0){
-      if(timer.session === 'work'){
-        dispatch({type: 'add-pomodoro'});
-      }
       dispatch({type: 'switch-session'});
     }
   });
