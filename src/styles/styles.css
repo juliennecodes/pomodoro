@@ -1,15 +1,3 @@
-/*--------------------------------------------------------------
-Styles
---------------------------------------------------------------*/
-.timer {
-  border-left: 2px solid;
-  border-right: 2px solid;
-  width: 100%;
-}
-  
-.timer-control{
-  padding: 8px 0px;
-  width: 67%;
-  border: 2px solid;
-  border-radius: 3px;
+.timer-control {
+  padding: 8px 40px;
 }

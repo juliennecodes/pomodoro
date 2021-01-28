@@ -2,26 +2,6 @@
 Layout
 --------------------------------------------------------------*/
 .App {
-    max-width: 100%;
-    margin: 0px auto;
-    height: 90vh;
-    padding: 24px 36px;
-  }
-  
-.pomodorosUl{
-  display: flex;
-  flex-direction: row;
-}
-
-.pomodorosUl{
-  position: absolute;
-  top: 0;
-}
-
-.timer {
-  text-align: center;
-}
-
-.timer-control {
-  justify-self: right;
+  max-width: 100%;
+  padding: 24px 36px;
 }

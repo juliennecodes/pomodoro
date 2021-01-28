@@ -12,6 +12,9 @@ body {
 .timer-control {
   background-color: hsl(354, 59%, 57%);
   color: hsl(0, 0%, 100%);
+  border-width: 2px;
+  border-radius: 3px;
+  border: solid;
 }
 
 .timer-control:focus{

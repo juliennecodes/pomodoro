@@ -1,18 +1,16 @@
 /*--------------------------------------------------------------
 Typography
 --------------------------------------------------------------*/
-body, h1, button{
-    font-family: 'Varela Round', sans-serif;
-    text-transform: uppercase;
-  }
-  
-.title{
-  font-size: 10px;
-  writing-mode: vertical-lr;
-  text-orientation: upright;
+body, h1, button {
+  font-family: "Varela Round", sans-serif;
+  text-transform: uppercase;
 }
 
-.session{
+.title {
+  font-size: 10px;
+}
+
+.session {
   font-size: 12px;
 }
 
@@ -20,7 +18,7 @@ body, h1, button{
   font-size: 24px;
 }
 
-.timer-control{
+.timer-control {
   font-size: 12px;
   text-transform: uppercase;
 }
