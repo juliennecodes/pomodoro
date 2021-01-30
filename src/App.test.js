@@ -172,6 +172,39 @@ test('when user clicks done for the day, a dialogue pops up saying you completed
   expect(screen.getByText(/you completed 3 pomodoros/i)).toBeInTheDocument();
 });
 
+test('when user closes the finished dialogue, timer resets', ()=>{
+  render(<App />);
+  const startButton = screen.getByRole('button', {name: 'Start'});
+
+  finishOneWorkSession(startButton);
+
+  expect(screen.getByText(/break/)).toBeInTheDocument();
+
+  let finishButton = screen.getByText(/done for the day/i);
+  
+  userEvent.click(finishButton);
+
+  expect(screen.getByText(/you completed 1 pomodoros/i)).toBeInTheDocument();
+
+  const closeButton = screen.getByTestId('svg-close');
+
+  userEvent.click(closeButton);
+
+  expect(screen.queryByText(/you completed 1 pomodoros/i)).not.toBeInTheDocument();
+  expect(screen.getByText(/work/)).toBeInTheDocument();
+  expect(screen.getByText(regexWorkTimer)).toBeInTheDocument();
+
+  finishButton = screen.getByText(/done for the day/i);
+  //this is a bit odd, I wanted to click on the done for the day button again just to make sure the state resets
+  //however, because the finish button element disappears from the DOM, its previous reference also disappears
+  //so I have to assign a new reference
+  //is this too mindful of the implementation?
+
+  userEvent.click(finishButton);
+
+  expect( screen.getByText(/you completed 0 pomodoros/i)).toBeInTheDocument();  
+});
+
 //------------------------------------------------------------------------------
 function doXTimes(callback, x) {
   for (let i = 0; i < x; i++) {

@@ -90,6 +90,12 @@ function App() {
   const finishTheDay = ()=>{
     clearInterval(scheduledCountdown.current);
     setFinished(true);
+    dispatch({type: 'stop-timer'});
+  }
+
+  const resetTimer = ()=>{
+    setFinished(false);
+    dispatch({type: 'reset-timer'});
   }
 
   useEffect( () =>{
@@ -110,8 +116,8 @@ function App() {
       <p className="session">{timer.session}</p>
       <Pomodoros session={timer.session} completedPomodoros={timer.completedPomodoros}/>
       <Timer timeRemaining={timer.timeRemaining} />
-      <TimerControl active={timer.active} session={timer.session} startTimer={startTimer} stopTimer={stopTimer} skipTimer={skipTimer}/>
-      <Finish completedPomodoros={timer.completedPomodoros } finished={finished} finishTheDay={finishTheDay}/>
+      <TimerControl active={timer.active} session={timer.session} startTimer={startTimer} stopTimer={stopTimer} skipTimer={skipTimer} finished={finished}/>
+      <Finish completedPomodoros={timer.completedPomodoros } finished={finished} finishTheDay={finishTheDay} resetTimer={resetTimer}/>
     </div>
   );
 }
