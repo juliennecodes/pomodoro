@@ -1,0 +1,31 @@
+.finished-question {
+  font-size: 10px;
+  color: hsl(354, 59%, 70%);
+  align-self: flex-end;
+  justify-self: flex-end;
+  position: fixed;
+  bottom: 36px;
+  right: 36px;
+  cursor: pointer;
+}
+
+.finished-question:hover {
+  color: hsl(354, 59%, 57%);
+}
+
+.finished-dialogue {
+    position: absolute;  
+    z-index: 2;
+    grid-row: 1/5 ;
+    grid-column: 1/7;
+    justify-self: center;
+    align-self: center;
+    background-color: hsl(0, 0%, 100%);
+    border: 2px solid hsl(354, 59%, 70%) ;
+    padding: 10%;
+    border-radius: 3px;
+}
+
+.finished-text {
+    font-size: 24px;
+}

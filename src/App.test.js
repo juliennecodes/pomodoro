@@ -159,6 +159,19 @@ test("skip button skips the big break session", () => {
   expect(screen.getByText(/work/)).toBeInTheDocument();
 });
 
+test('when user clicks done for the day, a dialogue pops up saying you completed x pomodoros', () => {
+  render(<App />);
+  const startButton = screen.getByRole('button', {name: 'Start'});
+
+  doXTimes(() => finishASetOfWorkAndBreakSession(startButton), 3);
+
+  const finishButton = screen.getByText(/done for the day/i);
+
+  userEvent.click(finishButton);
+
+  expect(screen.getByText(/you completed 3 pomodoros/i)).toBeInTheDocument();
+});
+
 //------------------------------------------------------------------------------
 function doXTimes(callback, x) {
   for (let i = 0; i < x; i++) {

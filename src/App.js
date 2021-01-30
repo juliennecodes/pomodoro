@@ -1,16 +1,17 @@
-import {useEffect, useReducer, useRef} from 'react';
+import {useEffect, useReducer, useRef, useState} from 'react';
 import {Pomodoros} from './components/Pomodoros';
 import {Timer} from './components/Timer';
 import { TimerControl } from './components/TimerControl';
+import { Finish } from './components/Finish';
 import notification from './assets/notification.wav';
 
-const workTimer = 1500;
-const breakTimer = 300;
-const bigBreakTimer = 1800;
+// const workTimer = 1500;
+// const breakTimer = 300;
+// const bigBreakTimer = 1800;
 
-// const workTimer = 5;
-// const breakTimer = 2;
-// const bigBreakTimer = 5;
+const workTimer = 5;
+const breakTimer = 2;
+const bigBreakTimer = 5;
 
 const initialTimer = {
   active: false,
@@ -55,11 +56,16 @@ const pomodoroReducer = (state, action) => {
       return {...state, active: false, session: 'work', timeRemaining: workTimer};
     }
   }
+
+  if(action.type === 'reset-timer'){
+    return initialTimer;
+  }
 }
 
 function App() {
   const [timer, dispatch] = useReducer(pomodoroReducer, initialTimer);
   const scheduledCountdown = useRef();
+  const [finished, setFinished] = useState(false);
 
   const countdown = () => {
     dispatch({type: 'time-decrease'});
@@ -81,6 +87,11 @@ function App() {
     dispatch({type: 'skip-timer'});
   };
 
+  const finishTheDay = ()=>{
+    clearInterval(scheduledCountdown.current);
+    setFinished(true);
+  }
+
   useEffect( () =>{
     if(timer.timeRemaining === 0){
       clearInterval(scheduledCountdown.current);
@@ -100,6 +111,7 @@ function App() {
       <Pomodoros session={timer.session} completedPomodoros={timer.completedPomodoros}/>
       <Timer timeRemaining={timer.timeRemaining} />
       <TimerControl active={timer.active} session={timer.session} startTimer={startTimer} stopTimer={stopTimer} skipTimer={skipTimer}/>
+      <Finish completedPomodoros={timer.completedPomodoros } finished={finished} finishTheDay={finishTheDay}/>
     </div>
   );
 }

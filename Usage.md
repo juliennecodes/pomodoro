@@ -48,3 +48,11 @@ dialogue pops up, you completed x pomodoros!
 
 user clicks no ->
 current session continues
+
+<!-- step by step -->
+user clicks on done for the day ->
+dialogue pops up, you completed x pomodoros!
+
+when you click on done for the day, you want the UI changed
+you want a paragraph that displays how many pomodoros you finished
+for  UI change to happen, you have to change some underlying data, which means a state has to keep track of it
