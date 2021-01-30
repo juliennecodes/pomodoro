@@ -1,0 +1,10 @@
+.pomodorosUl {
+  display: flex;
+  flex-direction: row;
+}
+
+.pomodoro:nth-child(1),
+.pomodoro:nth-child(2),
+.pomodoro:nth-child(3) {
+  padding-right: 8px;
+}

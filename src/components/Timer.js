@@ -1,3 +1,5 @@
+import './Timer.css';
+
 export function Timer({timeRemaining}){
     const minutesRemaining = Math.floor(timeRemaining / 60);
     const secondsRemaining = timeRemaining % 60;

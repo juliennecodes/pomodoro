@@ -1,4 +1,5 @@
 import {Pomodoro} from './Pomodoro';
+import './Pomodoros.css';
 
 export function Pomodoros({session, completedPomodoros}){
     if(session === 'big break'){

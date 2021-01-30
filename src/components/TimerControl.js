@@ -1,4 +1,5 @@
-export function TimerControls({active, session, startTimer, stopTimer, skipTimer}){
+import './TimerControl.css';
+export function TimerControl({active, session, startTimer, stopTimer, skipTimer}){
     if(active && session === 'work'){
         return(<button  className="timer-control" onClick={stopTimer}>Stop</button>)
     } 

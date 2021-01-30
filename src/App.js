@@ -1,16 +1,16 @@
 import {useEffect, useReducer, useRef} from 'react';
 import {Pomodoros} from './components/Pomodoros';
 import {Timer} from './components/Timer';
-import { TimerControls } from './components/TimerControls';
+import { TimerControl } from './components/TimerControl';
 import notification from './assets/notification.wav';
 
-// const workTimer = 1500;
-// const breakTimer = 300;
-// const bigBreakTimer = 1800;
+const workTimer = 1500;
+const breakTimer = 300;
+const bigBreakTimer = 1800;
 
-const workTimer = 5;
-const breakTimer = 2;
-const bigBreakTimer = 5;
+// const workTimer = 5;
+// const breakTimer = 2;
+// const bigBreakTimer = 5;
 
 const initialTimer = {
   active: false,
@@ -99,7 +99,7 @@ function App() {
       <p className="session">{timer.session}</p>
       <Pomodoros session={timer.session} completedPomodoros={timer.completedPomodoros}/>
       <Timer timeRemaining={timer.timeRemaining} />
-      <TimerControls active={timer.active} session={timer.session} startTimer={startTimer} stopTimer={stopTimer} skipTimer={skipTimer}/>
+      <TimerControl active={timer.active} session={timer.session} startTimer={startTimer} stopTimer={stopTimer} skipTimer={skipTimer}/>
     </div>
   );
 }
