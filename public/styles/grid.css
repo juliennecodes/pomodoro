@@ -41,6 +41,7 @@
 
   /* Styling */
   .App {
+    min-width: 240px;
     max-width: 400px;
     margin: 0 auto;
     padding: 20vh 36px;
