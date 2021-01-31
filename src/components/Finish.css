@@ -19,8 +19,8 @@
   grid-column: 1/2;
   justify-self: center;
   align-self: center;
-  background-color: hsl(0, 0%, 100%);
-  border: 2px solid hsl(354, 59%, 70%);
+  background-color: hsl(354, 59%, 57%);
+  border: 2px solid hsl(354, 59%, 57%);
   padding: 12px;
   border-radius: 3px;
   display: grid;
@@ -37,6 +37,7 @@
   align-self: center;
   justify-self: center;
   text-align: center;
+  color: hsl(0, 0%, 100%);
 }
 
 .close-icon {
@@ -44,11 +45,7 @@
   justify-self: flex-end;
   cursor: pointer;
   width: 12px;
-  color: hsl(354, 50%, 80%);
-}
 
-.close-icon:hover {
-  color: hsl(354, 59%, 57%);
 }
 
 @media screen and (min-width: 900px) {

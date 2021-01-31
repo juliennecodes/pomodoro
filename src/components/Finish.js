@@ -7,7 +7,7 @@ function FinishedDialogue({completedPomodoros, resetTimer}){
                 data-testid='svg-close'
                 onClick={()=> resetTimer()} 
                 xmlns="http://www.w3.org/2000/svg" 
-                fill='hsl(354, 59%, 57%)' 
+                fill='hsl(0, 0%, 100%)' 
                 width="24" 
                 height="24" 
                 viewBox="0 0 24 24">
