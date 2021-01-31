@@ -178,7 +178,12 @@ test('when user closes the finished dialogue, timer resets', ()=>{
 
   finishOneWorkSession(startButton);
 
-  expect(screen.getByText(/break/)).toBeInTheDocument();
+  // expect(screen.getByText(/break/)).toBeInTheDocument();
+  //calls attention that it is break, but it doesn't help, nothing about test scenario talks about breaks
+  //focus on what you're trying to prove
+  //complete the day, start a new day
+  //shouldn't be pomodoros for free, prove that you've reset your total count after closing the dialogue
+  //anything that you can strip out of here that doesn't directly impact or reinforce is not necessary in the test
 
   let finishButton = screen.getByText(/done for the day/i);
   
