@@ -4,9 +4,15 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom/extend-expect";
 
-const workTimer = 5;
-const breakTimer = 2;
-const bigBreakTimer = 5;
+const timer = {
+  work: 1500,
+  break: 300,
+  bigBreak: 1800,
+};
+
+const workTimer = timer.work;
+const breakTimer = timer.break;
+const bigBreakTimer = timer.bigBreak;
 
 const workTimerMs = workTimer * 1000;
 const breakTimerMs = breakTimer * 1000;

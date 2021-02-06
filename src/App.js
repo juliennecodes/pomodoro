@@ -5,18 +5,29 @@ import { TimerControl } from './components/TimerControl';
 import { Finish } from './components/Finish';
 import notification from './assets/notification.wav';
 
-// const workTimer = 1500;
-// const breakTimer = 300;
-// const bigBreakTimer = 1800;
+const prodTimer = {
+  work: 1500,
+  break: 300,
+  bigBreak: 1800,
+};
 
-const workTimer = 5;
-const breakTimer = 2;
-const bigBreakTimer = 5;
+const demoTimer = {
+  work: 5,
+  break: 2,
+  bigBreak: 5,
+};
+
+const timer = isDemo() ? demoTimer : prodTimer;
+
+function isDemo() {
+  const params = new URLSearchParams(window.location.search);
+  return params.has("demo");
+}
 
 const initialTimer = {
   active: false,
   session: 'work',
-  timeRemaining: workTimer,
+  timeRemaining: timer.work,
   completedPomodoros: 0,
 };
 
@@ -36,24 +47,24 @@ const pomodoroReducer = (state, action) => {
   }
 
   if(action.type === 'stop-timer'){
-    return {...state, active: false, timeRemaining: workTimer};
+    return {...state, active: false, timeRemaining: timer.work};
   }
 
   if(action.type === 'skip-timer'){
-    return {...state, active: false, session: 'work', timeRemaining: workTimer};
+    return {...state, active: false, session: 'work', timeRemaining: timer.work};
   }  
 
   if(action.type === 'switch-session'){
     if(state.session === 'work'){
       if((state.completedPomodoros + 1) % 4 === 0){
-        return {...state, active: false, session: 'big break', timeRemaining: bigBreakTimer, completedPomodoros: state.completedPomodoros + 1};
+        return {...state, active: false, session: 'big break', timeRemaining: timer.bigBreak, completedPomodoros: state.completedPomodoros + 1};
       } else {
-        return {...state, active: false, session: 'break', timeRemaining: breakTimer, completedPomodoros: state.completedPomodoros + 1};
+        return {...state, active: false, session: 'break', timeRemaining: timer.break, completedPomodoros: state.completedPomodoros + 1};
       }
     }
 
     if(state.session === 'break' || state.session === 'big break'){
-      return {...state, active: false, session: 'work', timeRemaining: workTimer};
+      return {...state, active: false, session: 'work', timeRemaining: timer.work};
     }
   }
 
