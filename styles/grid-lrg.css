@@ -1,35 +1,33 @@
-@supports (display: grid) {
-  @media screen and (min-width: 900px) {
-    .App {
-      display: grid;
-      grid: 15vh 15vh 15vh 15vh/75px 0.33fr 0.25fr 1fr 0.25fr 0.5fr;
-      grid-template-areas:
-        "title spaceA spaceA spaceA spaceA spaceA"
-        "spaceB session spaceX timer spaceY timer-control"
-        "spaceB pomodoros spaceX timer spaceY timer-control"
-        "spaceC spaceC spaceC spaceC spaceC spaceC";
-      gap: 0;
-    }
+@media screen and (min-width: 900px) {
+  .App {
+    display: grid;
+    grid: 15vh 15vh 15vh 15vh/75px 0.33fr 0.25fr 1fr 0.25fr 0.5fr;
+    grid-template-areas:
+      "title spaceA spaceA spaceA spaceA spaceA"
+      "spaceB session spaceX timer spaceY timer-control"
+      "spaceB pomodoros spaceX timer spaceY timer-control"
+      "spaceC spaceC spaceC spaceC spaceC spaceC";
+    gap: 0;
+  }
 
-    .App {
-      max-width: 900px;
-      padding: 20vh 36px;
-      position: relative;
-    }
+  .App {
+    max-width: 900px;
+    padding: 20vh 36px;
+    position: relative;
+  }
 
-    .title {
-      writing-mode: vertical-lr;
-      text-orientation: upright;
-    }
+  .title {
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+  }
 
-    .session {
-      position: absolute;
-      bottom: 16px;
-    }
+  .session {
+    position: absolute;
+    bottom: 16px;
+  }
 
-    .pomodoros {
-      position: absolute;
-      top: -4px;
-    }
+  .pomodoros {
+    position: absolute;
+    top: -4px;
   }
 }
