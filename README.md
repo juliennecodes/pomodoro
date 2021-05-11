@@ -23,7 +23,7 @@ production version - https://juliennecodes.github.io/pomodoro
 ## Deploy App in GitHub Pages
 - type command - npm install gh-pages --save -dev
 - add "homepage": "https://juliennecodes.github.io/pomodoro", in package.json
-  - adds homepage property
+  - add homepage property
   - homepage property's value is the GitHub Pages url
 - add "predeploy": "npm run build", "deploy": "gh-pages -d build" in the scripts property
   - predeploy - builds a minified app for deployment, is initiated after the deploy script runs
