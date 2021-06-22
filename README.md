@@ -34,3 +34,8 @@ production version - https://juliennecodes.github.io/pomodoro
   - go to settings
   - go to Pages section
   - in the Source section, select gh-pages as the branch
+
+## Updating the App
+- make changes to the app
+- commit changes to GitHub
+- type command - npm run deploy
