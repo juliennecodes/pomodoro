@@ -105,8 +105,8 @@ function App() {
   const finishTheDay = ()=>{
     clearInterval(scheduledCountdown.current);
     setFinished(true);
-    dispatch({type: 'stop-timer'});
     playSound(finishTheDayAudio);
+    dispatch({type: 'stop-timer'});
   }
 
   const resetTimer = ()=>{
