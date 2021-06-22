@@ -4,6 +4,9 @@ import {Timer} from './components/Timer';
 import { TimerControl } from './components/TimerControl';
 import { Finish } from './components/Finish';
 import notification from './assets/notification.wav';
+import finishTheDay from './assets/finishTheDay.wav'
+
+
 
 const prodTimer = {
   work: 1500,
@@ -32,6 +35,7 @@ const initialTimer = {
 };
 
 const notificationAudio = new Audio(notification);
+const finishTheDayAudio = new Audio(finishTheDay);
 const playSound = (sound) => {
   sound.play();
 };
@@ -102,6 +106,7 @@ function App() {
     clearInterval(scheduledCountdown.current);
     setFinished(true);
     dispatch({type: 'stop-timer'});
+    playSound(finishTheDayAudio);
   }
 
   const resetTimer = ()=>{
