@@ -1,0 +1,44 @@
+/* Grid */
+.App {
+  display: grid;
+  grid: 5vh 5vh 5vh 1vh 20vh 1vh 10vh/1fr;
+  grid-template-areas:
+    "title"
+    "session"
+    "pomodoros"
+    "spaceA"
+    "timer"
+    "spaceB"
+    "timer-control";
+  gap: 12px 0;
+}
+
+.title {
+  grid-area: title;
+}
+.session {
+  grid-area: session;
+}
+.pomodoros {
+  grid-area: pomodoros;
+}
+.timer {
+  grid-area: timer;
+}
+.timer-control {
+  grid-area: timer-control;
+}
+
+/* Styling */
+.App {
+  min-width: 240px;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20vh 36px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.session {
+  align-self: flex-end;
+}

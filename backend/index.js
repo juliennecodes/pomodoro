@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 const port = 8000;
 const app = express();
-const buildPath = path.join(__dirname, '..', 'frontend', 'build');
+const buildPath = path.join(__dirname, 'build');
 
 app.use(express.static(buildPath));
 
